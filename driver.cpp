@@ -2,6 +2,7 @@
 #include "mainwindow.h"
 
 
+
 Driver::Driver(QObject *parent) : QThread(parent)
 {
     Main_Window_ = dynamic_cast<MainWindow *>(parent);
@@ -25,6 +26,7 @@ void Driver::waitTermination()
 
     while(Terminate_);
 }
+
 
 
 void Driver::parseAndWriteValues(int *Data)

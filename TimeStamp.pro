@@ -1,8 +1,8 @@
-QT       += core gui
+QT       += core gui charts
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-CONFIG += c++11
+CONFIG += c++14
 
 # You can make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
@@ -12,19 +12,22 @@ SOURCES += \
     driver.cpp \
     ftdsocket.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    graphwindow.cpp
 
 HEADERS += \
     driver.h \
     ftdsocket.h \
     mainwindow.h \
+    graphwindow.h \
     ftd3xx.h
 
 
 FORMS += \
-    mainwindow.ui
+    mainwindow.ui \
+    graphwindow.ui
 
-LIBS += ${QMAKE_VAR__PRO_FILE_PWD_}/lib/libftd3xx.so
+LIBS += /home/yusuf/Documents/Workspace/qt-workspace/TimeStamp/lib/libftd3xx.so
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

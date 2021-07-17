@@ -3,8 +3,6 @@
 
 
 
-
-
 FtdSocket::FtdSocket()
 {
     Socket_Handle = NULL;
