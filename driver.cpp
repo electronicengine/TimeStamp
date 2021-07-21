@@ -23,6 +23,7 @@ std::vector<USBValueContainer> &Driver::getValueQueue()
     return Memory_.getLastQueue();
 }
 
+
 // Function to extract k bits from p position
 // and returns the extracted value as integer
 int Driver::bitExtracted(int Data, int K, int P)
@@ -48,11 +49,15 @@ void Driver::parseAndWriteValues(int *Data)
 
     USBValueContainer container;
 
+    (void ) Data;
     container.index = Value_Index;
     container.lock = 1;
-    container.channel = channel;
+
+    container.channel = (rand() % 4);
+
     container.coarse = Value_Index;
     container.fine = Value_Index;
+
 //    container.index = Value_Index;
 //    container.lock = bitExtracted(*Data, 1, 0);
 //    container.channel = bitExtracted(*Data, 3, 1) + 1;

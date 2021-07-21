@@ -19,6 +19,7 @@ GraphWorker::GraphWorker(QWidget *parent) : GraphWindow(parent)
 
     connect(ui->start_button, SIGNAL(toggled(bool)), this, SLOT(startOrStopGraphWork(bool)));
     connect(&Refresh_Timer, SIGNAL(timeout()), this, SLOT(refreshGraph()));
+    connect(this, SIGNAL(updateProgressBar(int)), ui->progress_bar, SLOT(setValue(int)));
 
 
 
@@ -136,6 +137,7 @@ void GraphWorker::startOrStopGraphWork(bool State)
 
         attachPanel();
 
+        emit updateProgressBar(0);
         qDebug() << ui->refresh_rate_box->value();
         Refresh_Timer.start(ui->refresh_rate_box->value());
         Driver_->start();
@@ -167,14 +169,17 @@ void GraphWorker::refreshGraph()
 
     processData(&results[0], values);
 
-    if(--Total_Refresh_Count == 0)
+    if(Current_Refresh_Count >= Total_Refresh_Count)
     {
         Refresh_Timer.stop();
         ui->start_button->toggle();
         QMessageBox::information(this, "Done", "Record is finished");
+        Current_Refresh_Count = 0;
     }
 
+    emit updateProgressBar((float)((float)Current_Refresh_Count / Total_Refresh_Count) * 100);
     Current_Refresh_Count++;
+
 }
 
 

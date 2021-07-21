@@ -1114,7 +1114,7 @@ border-image: url(:/images/stop_pressed.png);
             </widget>
            </item>
            <item>
-            <widget class="QProgressBar" name="simulation_progress">
+            <widget class="QProgressBar" name="progress_bar">
              <property name="value">
               <number>24</number>
              </property>

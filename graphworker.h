@@ -60,6 +60,7 @@ signals:
     void setPanel5Text(QString);
     void setPanel6Text(QString);
 
+    void updateProgressBar(int);
 
 };
 
