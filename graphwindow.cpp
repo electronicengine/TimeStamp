@@ -1,6 +1,7 @@
 #include "graphwindow.h"
 #include "QSplineSeries"
 #include "QFrame"
+#include "QMessageBox"
 #include "ui_graphwindow.h"
 
 
@@ -13,9 +14,23 @@ GraphWindow::GraphWindow(QWidget *parent) :
 
     setupGraph();
 
-    addSeries(SeriesType::c1);
+    connect(ui->c1_checkBox, SIGNAL(stateChanged(int)), this, SLOT(onCheckBoxStateChanged(int)));
+    connect(ui->c2_checkBox, SIGNAL(stateChanged(int)), this, SLOT(onCheckBoxStateChanged(int)));
+    connect(ui->c3_checkBox, SIGNAL(stateChanged(int)), this, SLOT(onCheckBoxStateChanged(int)));
+    connect(ui->c4_checkBox, SIGNAL(stateChanged(int)), this, SLOT(onCheckBoxStateChanged(int)));
 
-//    removeSeries(SeriesType::c1);
+    connect(ui->c1_2_checkBox, SIGNAL(stateChanged(int)), this, SLOT(onCheckBoxStateChanged(int)));
+    connect(ui->c1_3_checkBox, SIGNAL(stateChanged(int)), this, SLOT(onCheckBoxStateChanged(int)));
+    connect(ui->c1_4_checkBox, SIGNAL(stateChanged(int)), this, SLOT(onCheckBoxStateChanged(int)));
+    connect(ui->c2_3_checkBox, SIGNAL(stateChanged(int)), this, SLOT(onCheckBoxStateChanged(int)));
+    connect(ui->c2_4_checkBox, SIGNAL(stateChanged(int)), this, SLOT(onCheckBoxStateChanged(int)));
+    connect(ui->c3_4_checkBox, SIGNAL(stateChanged(int)), this, SLOT(onCheckBoxStateChanged(int)));
+    connect(ui->c1_2_3_checkBox, SIGNAL(stateChanged(int)), this, SLOT(onCheckBoxStateChanged(int)));
+    connect(ui->c1_2_4_checkBox, SIGNAL(stateChanged(int)), this, SLOT(onCheckBoxStateChanged(int)));
+    connect(ui->c1_3_4_checkBox, SIGNAL(stateChanged(int)), this, SLOT(onCheckBoxStateChanged(int)));
+    connect(ui->c2_3_4_checkBox, SIGNAL(stateChanged(int)), this, SLOT(onCheckBoxStateChanged(int)));
+    connect(ui->c1_2_3_4_checkBox, SIGNAL(stateChanged(int)), this, SLOT(onCheckBoxStateChanged(int)));
+
 }
 
 
@@ -23,6 +38,25 @@ GraphWindow::GraphWindow(QWidget *parent) :
 GraphWindow::~GraphWindow()
 {
     delete ui;
+}
+
+void GraphWindow::onCheckBoxStateChanged(int arg1)
+{
+
+    QCheckBox *check_box = (QCheckBox *)sender();
+
+    SeriesType::Type type = (SeriesType::Type) Series_Type.getType(check_box->text());
+    if(arg1 == 2)
+    {
+        bool ret = addSeries(type);
+        if(!ret)
+        {
+            QMessageBox::warning(this, "Warning!", "You can select most 6 counter at the same time.");
+            check_box->setChecked(false);
+        }
+    }
+    else if(arg1 == 0)
+        removeSeries(type);
 }
 
 
@@ -52,7 +86,6 @@ void GraphWindow::setupGraph()
 
     ui->groupBox_3->layout()->addWidget(Chart_View.get());
 
-
     Chart_->axes(Qt::Horizontal).back()->setRange(0, 100);
     Chart_->axes(Qt::Vertical).back()->setRange(0, 100);
 
@@ -60,23 +93,41 @@ void GraphWindow::setupGraph()
 
 
 
-void GraphWindow::addSeries(SeriesType::Type Type)
+bool GraphWindow::addSeries(SeriesType::Type Type)
 {
+
+    if(Series_List.size() > 5)
+        return false;
 
     GraphContainer graph_container;
 
-    graph_container.Series_ = new QLineSeries;
-    graph_container.Color_ = Line_Colors.getColor(Series_List.size());
+    graph_container.Series_ = new QLineSeries(this);
+    graph_container.Color_ = Series_Type.getColor(Series_List.size());
+    qDebug() << "Color: " << Series_List.size();
+
     graph_container.Type_ = Type;
 
     Chart_->addSeries(graph_container.Series_ );
+    Chart_->legend()->hide();
+    Chart_->createDefaultAxes();
 
-    for(int i = 0; i<100; i++)
-        graph_container.Series_->append(i*(Series_List.size()+1), i);
+    Chart_->createDefaultAxes();
+    Chart_->axes(Qt::Horizontal).back()->setGridLineVisible(true);
+    Chart_->axes(Qt::Horizontal).back()->setLabelsColor(QColor(114, 159, 207));
 
-    QPen pen = graph_container.Series_->pen();
-    pen.setBrush(QBrush(graph_container.Color_));
-    graph_container.Series_->setPen(pen);
+    Chart_->axes(Qt::Vertical).back()->setLabelsColor(QColor(114, 159, 207));
+    Chart_->axes(Qt::Vertical).back()->setGridLineVisible(true);
+
+    Chart_->setTitleBrush(QBrush(QColor(114, 159, 207)));
+    Chart_->setBackgroundBrush(QBrush(QColor(46, 52, 54)));
+    Chart_->setPlotAreaBackgroundBrush(QBrush(QColor(46, 52, 54)));
+    Chart_->setAnimationOptions(QChart::AllAnimations);
+
+    Chart_->axes(Qt::Horizontal).back()->setRange(0, 100);
+    Chart_->axes(Qt::Vertical).back()->setRange(0, 100);
+
+
+    Chart_View->setRenderHint(QPainter::Antialiasing);
 
     QVBoxLayout *vertical_layout = new QVBoxLayout;
     QLabel *counter_panel = new QLabel;
@@ -85,7 +136,7 @@ void GraphWindow::addSeries(SeriesType::Type Type)
     counter_panel->setText("0");
     counter_panel->setFrameShape(QFrame::Panel);
     counter_panel->setAlignment(Qt::AlignCenter);
-    counter_panel->setStyleSheet("color:" + Line_Colors.Colors_Html[Series_List.size()] +  ";");
+    counter_panel->setStyleSheet("color:" + Series_Type.Colors_Html[Series_List.size()] +  ";");
 
     QFont font;
     font.setPointSize(32);
@@ -93,7 +144,7 @@ void GraphWindow::addSeries(SeriesType::Type Type)
 
     panel_label->setText(Series_Type.getName(graph_container.Type_));
     panel_label->setAlignment(Qt::AlignCenter);
-    panel_label->setStyleSheet("color:" + Line_Colors.Colors_Html[Series_List.size()] +  ";");
+    panel_label->setStyleSheet("color:" + Series_Type.Colors_Html[Series_List.size()] +  ";");
 
     vertical_layout->addWidget(counter_panel);
     vertical_layout->addWidget(panel_label);
@@ -104,9 +155,13 @@ void GraphWindow::addSeries(SeriesType::Type Type)
     graph_container.Panel_.Counter_Panel = counter_panel;
     graph_container.Panel_.Panel_Label = panel_label;
 
+    for(int i=0; i<100; i++)
+        graph_container.Series_->append(i, 1);
+
     Series_List.push_back(graph_container);
 
 
+    return true;
 
 }
 
@@ -133,9 +188,7 @@ void GraphWindow::removeSeries(SeriesType::Type Type)
         }
     }
 
+
 }
-
-
-
 
 

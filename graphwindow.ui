@@ -233,7 +233,7 @@ border-image: url(:/images/toggle_button_off.png);
               </size>
              </property>
              <property name="styleSheet">
-              <string notr="true">color: &quot;#6a5eda&quot;;</string>
+              <string notr="true"/>
              </property>
              <property name="text">
               <string>Channel 2:</string>
@@ -291,7 +291,7 @@ border-image: url(:/images/toggle_button_off.png);
              <item>
               <widget class="QLabel" name="label_33">
                <property name="styleSheet">
-                <string notr="true">color: &quot;#6a5eda&quot;;</string>
+                <string notr="true"/>
                </property>
                <property name="text">
                 <string>Treshold</string>
@@ -304,7 +304,7 @@ border-image: url(:/images/toggle_button_off.png);
                 <widget class="QSpinBox" name="cfp_lot_box_7">
                  <property name="styleSheet">
                   <string notr="true">background-color:  #272b2d;
-color: &quot;#6a5eda&quot;;</string>
+</string>
                  </property>
                  <property name="maximum">
                   <number>5000</number>
@@ -317,7 +317,7 @@ color: &quot;#6a5eda&quot;;</string>
                <item>
                 <widget class="QLabel" name="label_34">
                  <property name="styleSheet">
-                  <string notr="true">color: &quot;#6a5eda&quot;;</string>
+                  <string notr="true"/>
                  </property>
                  <property name="text">
                   <string>mV</string>
@@ -333,7 +333,7 @@ color: &quot;#6a5eda&quot;;</string>
              <item>
               <widget class="QLabel" name="label_35">
                <property name="styleSheet">
-                <string notr="true">color: &quot;#6a5eda&quot;;</string>
+                <string notr="true"/>
                </property>
                <property name="text">
                 <string>Edge</string>
@@ -343,7 +343,7 @@ color: &quot;#6a5eda&quot;;</string>
              <item>
               <widget class="QComboBox" name="comboBox_8">
                <property name="styleSheet">
-                <string notr="true">color: &quot;#6a5eda&quot;;</string>
+                <string notr="true"/>
                </property>
               </widget>
              </item>
@@ -354,7 +354,7 @@ color: &quot;#6a5eda&quot;;</string>
              <item>
               <widget class="QLabel" name="label_36">
                <property name="styleSheet">
-                <string notr="true">color: &quot;#6a5eda&quot;;</string>
+                <string notr="true"/>
                </property>
                <property name="text">
                 <string>Delay</string>
@@ -366,8 +366,7 @@ color: &quot;#6a5eda&quot;;</string>
                <item>
                 <widget class="QSpinBox" name="cfp_lot_box_8">
                  <property name="styleSheet">
-                  <string notr="true">color: &quot;#6a5eda&quot;;
-background-color:  #272b2d;</string>
+                  <string notr="true">background-color:  #272b2d;</string>
                  </property>
                  <property name="maximum">
                   <number>5000</number>
@@ -380,7 +379,7 @@ background-color:  #272b2d;</string>
                <item>
                 <widget class="QLabel" name="label_37">
                  <property name="styleSheet">
-                  <string notr="true">color: &quot;#6a5eda&quot;;</string>
+                  <string notr="true"/>
                  </property>
                  <property name="text">
                   <string>ms</string>
@@ -396,7 +395,7 @@ background-color:  #272b2d;</string>
              <item>
               <widget class="QLabel" name="label_42">
                <property name="styleSheet">
-                <string notr="true">color: &quot;#6a5eda&quot;;</string>
+                <string notr="true"/>
                </property>
                <property name="text">
                 <string>Frequency</string>
@@ -406,7 +405,7 @@ background-color:  #272b2d;</string>
              <item>
               <widget class="QLabel" name="label_43">
                <property name="styleSheet">
-                <string notr="true">color: &quot;#6a5eda&quot;;</string>
+                <string notr="true"/>
                </property>
                <property name="frameShape">
                 <enum>QFrame::Panel</enum>
@@ -431,7 +430,7 @@ background-color:  #272b2d;</string>
               </size>
              </property>
              <property name="styleSheet">
-              <string notr="true">color: &quot;#b7ff00&quot;;</string>
+              <string notr="true"/>
              </property>
              <property name="text">
               <string>Channel 3:</string>
@@ -489,7 +488,7 @@ border-image: url(:/images/toggle_button_off.png);
              <item>
               <widget class="QLabel" name="label_44">
                <property name="styleSheet">
-                <string notr="true">color: &quot;#b7ff00&quot;;</string>
+                <string notr="true"/>
                </property>
                <property name="text">
                 <string>Treshold</string>
@@ -501,8 +500,7 @@ border-image: url(:/images/toggle_button_off.png);
                <item>
                 <widget class="QSpinBox" name="cfp_lot_box_9">
                  <property name="styleSheet">
-                  <string notr="true">color: &quot;#b7ff00&quot;;
-background-color:  #272b2d;</string>
+                  <string notr="true">background-color:  #272b2d;</string>
                  </property>
                  <property name="maximum">
                   <number>5000</number>
@@ -515,7 +513,7 @@ background-color:  #272b2d;</string>
                <item>
                 <widget class="QLabel" name="label_45">
                  <property name="styleSheet">
-                  <string notr="true">color: &quot;#b7ff00&quot;;</string>
+                  <string notr="true"/>
                  </property>
                  <property name="text">
                   <string>mV</string>
@@ -531,7 +529,7 @@ background-color:  #272b2d;</string>
              <item>
               <widget class="QLabel" name="label_46">
                <property name="styleSheet">
-                <string notr="true">color: &quot;#b7ff00&quot;;</string>
+                <string notr="true"/>
                </property>
                <property name="text">
                 <string>Edge</string>
@@ -541,7 +539,7 @@ background-color:  #272b2d;</string>
              <item>
               <widget class="QComboBox" name="comboBox_10">
                <property name="styleSheet">
-                <string notr="true">color: &quot;#b7ff00&quot;;</string>
+                <string notr="true"/>
                </property>
               </widget>
              </item>
@@ -552,7 +550,7 @@ background-color:  #272b2d;</string>
              <item>
               <widget class="QLabel" name="label_47">
                <property name="styleSheet">
-                <string notr="true">color: &quot;#b7ff00&quot;;</string>
+                <string notr="true"/>
                </property>
                <property name="text">
                 <string>Delay</string>
@@ -564,8 +562,7 @@ background-color:  #272b2d;</string>
                <item>
                 <widget class="QSpinBox" name="cfp_lot_box_10">
                  <property name="styleSheet">
-                  <string notr="true">color: &quot;#b7ff00&quot;;
-background-color:  #272b2d;</string>
+                  <string notr="true">background-color:  #272b2d;</string>
                  </property>
                  <property name="maximum">
                   <number>5000</number>
@@ -578,7 +575,7 @@ background-color:  #272b2d;</string>
                <item>
                 <widget class="QLabel" name="label_48">
                  <property name="styleSheet">
-                  <string notr="true">color: &quot;#b7ff00&quot;;</string>
+                  <string notr="true"/>
                  </property>
                  <property name="text">
                   <string>ms</string>
@@ -594,7 +591,7 @@ background-color:  #272b2d;</string>
              <item>
               <widget class="QLabel" name="label_50">
                <property name="styleSheet">
-                <string notr="true">color: &quot;#b7ff00&quot;;</string>
+                <string notr="true"/>
                </property>
                <property name="text">
                 <string>Frequency</string>
@@ -604,7 +601,7 @@ background-color:  #272b2d;</string>
              <item>
               <widget class="QLabel" name="label_51">
                <property name="styleSheet">
-                <string notr="true">color: &quot;#b7ff00&quot;;</string>
+                <string notr="true"/>
                </property>
                <property name="frameShape">
                 <enum>QFrame::Panel</enum>
@@ -629,7 +626,7 @@ background-color:  #272b2d;</string>
               </size>
              </property>
              <property name="styleSheet">
-              <string notr="true">color: &quot;#f0a600&quot;;</string>
+              <string notr="true"/>
              </property>
              <property name="text">
               <string>Channel 4:</string>
@@ -687,7 +684,7 @@ border-image: url(:/images/toggle_button_off.png);
              <item>
               <widget class="QLabel" name="label_52">
                <property name="styleSheet">
-                <string notr="true">color: &quot;#f0a600&quot;;</string>
+                <string notr="true"/>
                </property>
                <property name="text">
                 <string>Treshold</string>
@@ -725,7 +722,7 @@ border-image: url(:/images/toggle_button_off.png);
              <item>
               <widget class="QLabel" name="label_54">
                <property name="styleSheet">
-                <string notr="true">color: &quot;#f0a600&quot;;</string>
+                <string notr="true"/>
                </property>
                <property name="text">
                 <string>Edge</string>
@@ -735,7 +732,7 @@ border-image: url(:/images/toggle_button_off.png);
              <item>
               <widget class="QComboBox" name="comboBox_12">
                <property name="styleSheet">
-                <string notr="true">color: &quot;#f0a600&quot;;</string>
+                <string notr="true"/>
                </property>
               </widget>
              </item>
@@ -746,7 +743,7 @@ border-image: url(:/images/toggle_button_off.png);
              <item>
               <widget class="QLabel" name="label_55">
                <property name="styleSheet">
-                <string notr="true">color: &quot;#f0a600&quot;;</string>
+                <string notr="true"/>
                </property>
                <property name="text">
                 <string>Delay</string>
@@ -758,8 +755,7 @@ border-image: url(:/images/toggle_button_off.png);
                <item>
                 <widget class="QSpinBox" name="cfp_lot_box_12">
                  <property name="styleSheet">
-                  <string notr="true">color: &quot;#f0a600&quot;;
-background-color:  #272b2d;</string>
+                  <string notr="true">background-color:  #272b2d;</string>
                  </property>
                  <property name="maximum">
                   <number>5000</number>
@@ -772,7 +768,7 @@ background-color:  #272b2d;</string>
                <item>
                 <widget class="QLabel" name="label_56">
                  <property name="styleSheet">
-                  <string notr="true">color: &quot;#f0a600&quot;;</string>
+                  <string notr="true"/>
                  </property>
                  <property name="text">
                   <string>ms</string>
@@ -788,7 +784,7 @@ background-color:  #272b2d;</string>
              <item>
               <widget class="QLabel" name="label_58">
                <property name="styleSheet">
-                <string notr="true">color: &quot;#f0a600&quot;;</string>
+                <string notr="true"/>
                </property>
                <property name="text">
                 <string>Frequency</string>
@@ -798,7 +794,7 @@ background-color:  #272b2d;</string>
              <item>
               <widget class="QLabel" name="label_59">
                <property name="styleSheet">
-                <string notr="true">color: &quot;#f0a600&quot;;</string>
+                <string notr="true"/>
                </property>
                <property name="frameShape">
                 <enum>QFrame::Panel</enum>
@@ -830,37 +826,37 @@ background-color:  #272b2d;</string>
          <item>
           <layout class="QVBoxLayout" name="verticalLayout_2">
            <item>
-            <widget class="QCheckBox" name="checkBox">
+            <widget class="QCheckBox" name="c1_checkBox">
              <property name="text">
-              <string>1</string>
+              <string>C1</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QCheckBox" name="checkBox_2">
+            <widget class="QCheckBox" name="c2_checkBox">
              <property name="text">
-              <string>2</string>
+              <string>C2</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QCheckBox" name="checkBox_3">
+            <widget class="QCheckBox" name="c3_checkBox">
              <property name="text">
-              <string>3</string>
+              <string>C3</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QCheckBox" name="checkBox_4">
+            <widget class="QCheckBox" name="c4_checkBox">
              <property name="text">
-              <string>4</string>
+              <string>C4</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QCheckBox" name="checkBox_5">
+            <widget class="QCheckBox" name="c1_2_checkBox">
              <property name="text">
-              <string>1/2</string>
+              <string>C1/2</string>
              </property>
             </widget>
            </item>
@@ -869,37 +865,37 @@ background-color:  #272b2d;</string>
          <item>
           <layout class="QVBoxLayout" name="verticalLayout_4">
            <item>
-            <widget class="QCheckBox" name="checkBox_6">
+            <widget class="QCheckBox" name="c1_3_checkBox">
              <property name="text">
-              <string>1/3</string>
+              <string>C1/3</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QCheckBox" name="checkBox_7">
+            <widget class="QCheckBox" name="c1_4_checkBox">
              <property name="text">
-              <string>1/4</string>
+              <string>C1/4</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QCheckBox" name="checkBox_8">
+            <widget class="QCheckBox" name="c2_3_checkBox">
              <property name="text">
-              <string>2/3</string>
+              <string>C2/3</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QCheckBox" name="checkBox_9">
+            <widget class="QCheckBox" name="c2_4_checkBox">
              <property name="text">
-              <string>2/4</string>
+              <string>C2/4</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QCheckBox" name="checkBox_10">
+            <widget class="QCheckBox" name="c3_4_checkBox">
              <property name="text">
-              <string>3/4</string>
+              <string>C3/4</string>
              </property>
             </widget>
            </item>
@@ -908,37 +904,37 @@ background-color:  #272b2d;</string>
          <item>
           <layout class="QVBoxLayout" name="verticalLayout_3">
            <item>
-            <widget class="QCheckBox" name="checkBox_11">
+            <widget class="QCheckBox" name="c1_2_3_checkBox">
              <property name="text">
-              <string>1/2/3</string>
+              <string>C1/2/3</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QCheckBox" name="checkBox_12">
+            <widget class="QCheckBox" name="c1_2_4_checkBox">
              <property name="text">
-              <string>1/2/4</string>
+              <string>C1/2/4</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QCheckBox" name="checkBox_13">
+            <widget class="QCheckBox" name="c1_3_4_checkBox">
              <property name="text">
-              <string>1/3/4</string>
+              <string>C1/3/4</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QCheckBox" name="checkBox_14">
+            <widget class="QCheckBox" name="c2_3_4_checkBox">
              <property name="text">
-              <string>2/3/4</string>
+              <string>C2/3/4</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QCheckBox" name="checkBox_15">
+            <widget class="QCheckBox" name="c1_2_3_4_checkBox">
              <property name="text">
-              <string>1/2/3/4</string>
+              <string>C1/2/3/4</string>
              </property>
             </widget>
            </item>
@@ -993,7 +989,7 @@ background-color:  #272b2d;</string>
               </widget>
              </item>
              <item>
-              <widget class="QSpinBox" name="spinBox_2">
+              <widget class="QSpinBox" name="record_time_box">
                <property name="singleStep">
                 <number>1</number>
                </property>
@@ -1026,12 +1022,15 @@ background-color:  #272b2d;</string>
               </widget>
              </item>
              <item>
-              <widget class="QSpinBox" name="spinBox">
+              <widget class="QSpinBox" name="refresh_rate_box">
+               <property name="minimum">
+                <number>100</number>
+               </property>
                <property name="maximum">
                 <number>5000</number>
                </property>
                <property name="value">
-                <number>1000</number>
+                <number>200</number>
                </property>
               </widget>
              </item>

@@ -11,20 +11,26 @@ CONFIG += c++14
 SOURCES += \
     driver.cpp \
     ftdsocket.cpp \
+    graphworker.cpp \
     main.cpp \
-    mainwindow.cpp \
-    graphwindow.cpp
+    graphwindow.cpp \
+    raundrobinmemory.cpp \
+    threadpool.cpp \
+    valuesaver.cpp
 
 HEADERS += \
+    containers.h \
     driver.h \
     ftdsocket.h \
-    mainwindow.h \
+    graphworker.h \
     graphwindow.h \
-    ftd3xx.h
+    ftd3xx.h \
+    raundrobinmemory.h \
+    threadpool.h \
+    valuesaver.h
 
 
 FORMS += \
-    mainwindow.ui \
     graphwindow.ui
 
 LIBS += /home/yusuf/Documents/Workspace/qt-workspace/TimeStamp/lib/libftd3xx.so

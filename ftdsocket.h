@@ -6,16 +6,18 @@
 #include <vector>
 #include <inttypes.h>
 #include "ftd3xx.h"
+#include "containers.h"
 
 #define FIFO_CHANNEL_1	0
 #define FIFO_CHANNEL_2	1
 #define FIFO_CHANNEL_3	2
 #define FIFO_CHANNEL_4	3
+#define READ_PIPE       0x82
+
 
 #define TIMEOUT 1000
 
-#define FAIL    -1
-#define SUCCESS 0
+
 
 class FtdSocket
 {

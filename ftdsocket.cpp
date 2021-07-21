@@ -61,10 +61,10 @@ int FtdSocket::read32()
     DWORD count;
     uint32_t data;
 
-    if (FT_OK != FT_ReadPipeEx(Socket_Handle, FIFO_CHANNEL_1, (uint8_t *)&data, sizeof(uint32_t),
-                &count, TIMEOUT))
+    if (FT_OK != FT_ReadPipe(Socket_Handle, READ_PIPE, (uint8_t *)&data, sizeof(uint32_t),
+                &count, NULL))
     {
-        qDebug() << "Failed to read";
+//        qDebug() << "Failed to read";
         return FAIL;
     }
 

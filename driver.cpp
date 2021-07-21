@@ -5,10 +5,22 @@
 
 Driver::Driver(QObject *parent) : QThread(parent)
 {
-    Main_Window_ = dynamic_cast<MainWindow *>(parent);
+
+    Memory_.setSize(RAUNDROBIN_SIZE);
 
     Device_.openSocket();
     Terminate_ = false;
+    Value_Index = 0;
+}
+
+
+
+std::vector<USBValueContainer> &Driver::getValueQueue()
+{
+
+    Value_Index = 0;
+
+    return Memory_.getLastQueue();
 }
 
 // Function to extract k bits from p position
@@ -32,13 +44,28 @@ void Driver::waitTermination()
 void Driver::parseAndWriteValues(int *Data)
 {
 
-    uint8_t lock = bitExtracted(*Data, 1, 0);
-    uint8_t channel = bitExtracted(*Data, 3, 1) + 1;
-    uint32_t coarse = bitExtracted(*Data, 20, 4);
-    uint8_t fine = bitExtracted(*Data, 6, 24);
+    static int channel = 0;
 
+    USBValueContainer container;
 
-    Main_Window_->updateValues(&channel, &fine, &coarse, &lock);
+    container.index = Value_Index;
+    container.lock = 1;
+    container.channel = channel;
+    container.coarse = Value_Index;
+    container.fine = Value_Index;
+//    container.index = Value_Index;
+//    container.lock = bitExtracted(*Data, 1, 0);
+//    container.channel = bitExtracted(*Data, 3, 1) + 1;
+//    container.coarse = bitExtracted(*Data, 20, 4);
+//    container.fine = bitExtracted(*Data, 6, 24);
+
+    Memory_.pushBack(container);
+
+    Value_Index++;
+    channel++;
+
+    if(channel >= 4)
+        channel = 0;
 
 }
 
@@ -54,11 +81,11 @@ void Driver::run()
         if(Terminate_ == true)
             break;
 
-        value = Device_.read32();
-        if(value != FAIL)
+//        value = Device_.read32();
+//        if(value != FAIL)
             parseAndWriteValues(&value);
-        else
-            Main_Window_->usbReadFailed();
+
+            usleep(1000);
     }
 
     Terminate_ = false;
