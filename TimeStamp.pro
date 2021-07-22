@@ -33,7 +33,7 @@ HEADERS += \
 FORMS += \
     graphwindow.ui
 
-LIBS += /home/yusuf/Documents/workspace/TimeStamp/lib/libftd3xx.so
+LIBS += /home/yusuf/Documents/Workspace/qt-workspace/TimeStamp/lib/libftd3xx.so
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

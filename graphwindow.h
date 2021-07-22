@@ -1,9 +1,10 @@
 #ifndef GRAPHWINDOW_H
 #define GRAPHWINDOW_H
 
+#include <QFileDialog>
 #include <QMainWindow>
 #include "containers.h"
-
+#include "valuesaver.h"
 
 #define MAX_LINE_NUM    6
 
@@ -34,13 +35,16 @@ signals:
     void setPanel5Text(QString);
     void setPanel6Text(QString);
 
+    void setSaveDirectory(QString);
 
 private slots:
     void onCheckBoxStateChanged(int arg1);
+    void onClickFileBrowserButton(bool);
 
 protected:
     Ui::GraphWindow *ui;
     std::list<GraphContainer> Series_List;
+    ValueSaver *Saver_;
 
 private:
 

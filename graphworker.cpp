@@ -141,6 +141,13 @@ void GraphWorker::startOrStopGraphWork(bool State)
         qDebug() << ui->refresh_rate_box->value();
         Refresh_Timer.start(ui->refresh_rate_box->value());
         Driver_->start();
+
+        qDebug() <<ui->browse_file->text();
+
+        Saver_->openFile(ui->save_directory->text());
+
+        Saver_->start();
+
     }
     else
     {
@@ -149,6 +156,9 @@ void GraphWorker::startOrStopGraphWork(bool State)
         detachPanel();
         Refresh_Timer.stop();
         Driver_->waitTermination();
+
+        Saver_->closeFile();
+
     }
 
 }
@@ -175,6 +185,8 @@ void GraphWorker::refreshGraph()
         ui->start_button->toggle();
         QMessageBox::information(this, "Done", "Record is finished");
         Current_Refresh_Count = 0;
+        Saver_->closeFile();
+
     }
 
     emit updateProgressBar((float)((float)Current_Refresh_Count / Total_Refresh_Count) * 100);
@@ -217,6 +229,8 @@ void GraphWorker::processData(std::future<void> *Results, std::vector<USBValueCo
     }
 
     drawGraph();
+
+    Saver_->saveValues(Values);
 
 }
 

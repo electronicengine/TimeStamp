@@ -45,6 +45,7 @@ void Driver::waitTermination()
 void Driver::parseAndWriteValues(int *Data)
 {
 
+    static int i = 0;
     static int channel = 0;
 
     USBValueContainer container;
@@ -53,7 +54,8 @@ void Driver::parseAndWriteValues(int *Data)
     container.index = Value_Index;
     container.lock = 1;
 
-    container.channel = (rand() % 4);
+
+    container.channel = channel;
 
     container.coarse = Value_Index;
     container.fine = Value_Index;
@@ -72,6 +74,10 @@ void Driver::parseAndWriteValues(int *Data)
     if(channel >= 4)
         channel = 0;
 
+    i++;
+
+    if(i > 60)
+        i=0;
 }
 
 
@@ -90,7 +96,7 @@ void Driver::run()
 //        if(value != FAIL)
             parseAndWriteValues(&value);
 
-            usleep(1000);
+            usleep(10000);
     }
 
     Terminate_ = false;

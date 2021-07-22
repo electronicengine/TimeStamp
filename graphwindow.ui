@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>TimeStamp @ Hyperion Technologies</string>
   </property>
   <property name="styleSheet">
    <string notr="true">background-color: rgb(46, 52, 54);
@@ -1146,7 +1146,7 @@ border-image: url(:/images/stop_pressed.png);
            <item>
             <layout class="QHBoxLayout" name="horizontalLayout_14">
              <item>
-              <widget class="QLineEdit" name="simulation_name">
+              <widget class="QLineEdit" name="save_directory">
                <property name="palette">
                 <palette>
                  <active>
@@ -1382,7 +1382,7 @@ border-image: url(:/images/stop_pressed.png);
               </widget>
              </item>
              <item>
-              <widget class="QPushButton" name="open_graph_button">
+              <widget class="QPushButton" name="browse_file">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                  <horstretch>49</horstretch>
@@ -1402,11 +1402,11 @@ border-image: url(:/images/stop_pressed.png);
                 </size>
                </property>
                <property name="styleSheet">
-                <string notr="true">#open_graph_button
+                <string notr="true">#browse_file
 {
 border-image: url(:/images/show_unpressed.png);
 }
-#open_graph_button:pressed
+#browse_file:pressed
 {
 border-image: url(:/images/show_pressed.png);
 }

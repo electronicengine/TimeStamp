@@ -14,6 +14,9 @@ GraphWindow::GraphWindow(QWidget *parent) :
 
     setupGraph();
 
+    connect(ui->browse_file, SIGNAL(clicked(bool)), this, SLOT(onClickFileBrowserButton(bool)));
+    connect(this, SIGNAL(setSaveDirectory(QString)), ui->save_directory, SLOT(setText(QString)));
+
     connect(ui->c1_checkBox, SIGNAL(stateChanged(int)), this, SLOT(onCheckBoxStateChanged(int)));
     connect(ui->c2_checkBox, SIGNAL(stateChanged(int)), this, SLOT(onCheckBoxStateChanged(int)));
     connect(ui->c3_checkBox, SIGNAL(stateChanged(int)), this, SLOT(onCheckBoxStateChanged(int)));
@@ -31,6 +34,7 @@ GraphWindow::GraphWindow(QWidget *parent) :
     connect(ui->c2_3_4_checkBox, SIGNAL(stateChanged(int)), this, SLOT(onCheckBoxStateChanged(int)));
     connect(ui->c1_2_3_4_checkBox, SIGNAL(stateChanged(int)), this, SLOT(onCheckBoxStateChanged(int)));
 
+    Saver_ = new ValueSaver(this);
 }
 
 
@@ -39,6 +43,8 @@ GraphWindow::~GraphWindow()
 {
     delete ui;
 }
+
+
 
 void GraphWindow::onCheckBoxStateChanged(int arg1)
 {
@@ -57,6 +63,15 @@ void GraphWindow::onCheckBoxStateChanged(int arg1)
     }
     else if(arg1 == 0)
         removeSeries(type);
+}
+
+
+
+void GraphWindow::onClickFileBrowserButton(bool)
+{
+    QString dir = QFileDialog::getExistingDirectory(this, tr("Open Directory"));
+
+    emit setSaveDirectory(dir);
 }
 
 
@@ -170,7 +185,6 @@ bool GraphWindow::addSeries(SeriesType::Type Type)
 void GraphWindow::removeSeries(SeriesType::Type Type)
 {
 
-
     for (std::list<GraphContainer>::iterator it=Series_List.begin(); it!=Series_List.end(); ++it)
     {
         if(it->Type_ == Type)
@@ -187,7 +201,6 @@ void GraphWindow::removeSeries(SeriesType::Type Type)
 
         }
     }
-
 
 }
 
