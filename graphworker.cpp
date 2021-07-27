@@ -14,6 +14,9 @@ GraphWorker::GraphWorker(QWidget *parent) : GraphWindow(parent)
 
     Total_Refresh_Count = 0;
     Current_Refresh_Count = 0;
+    Axis_Maximum = 100;
+    Current_Covergence_Index = 0;
+    Recording_Started = false;
 
     Driver_ = new Driver(this);
 
@@ -30,13 +33,22 @@ GraphWorker::GraphWorker(QWidget *parent) : GraphWindow(parent)
     Signals_.push_back(std::bind(&GraphWorker::setPanel5Text, this, _1));
     Signals_.push_back(std::bind(&GraphWorker::setPanel6Text, this, _1));
 
+
+
 }
 
 
 
 void GraphWorker::calculateTimeStamp(USBValueContainer *Container)
 {
-    Container->timestamp = Container->coarse * Container->fine;
+
+    //[(coarse_cntr_Y-coarse_cntr_X)*5 ns] - [(fine_cntr_Y +fine_cntr_X + 2) * 125 ps]
+
+    Container->timestamp = ((Container->coarse - Container->pre_coarse) * 5) -
+            ((Container->fine + Container->pre_fine + 2) * 125);
+
+    Container->covergence_section = (Container->timestamp - Starting_TimeStamp) / Covergence_Treshold;
+
 }
 
 
@@ -125,6 +137,13 @@ void GraphWorker::detachPanel()
 
 
 
+void GraphWorker::setGraphAxisMaximum(int Value)
+{
+    Chart_->axes(Qt::Vertical).back()->setRange(0, Value);
+}
+
+
+
 void GraphWorker::startOrStopGraphWork(bool State)
 {
 
@@ -132,6 +151,8 @@ void GraphWorker::startOrStopGraphWork(bool State)
     {
 
         qDebug() << "Started";
+
+        Covergence_Treshold = ui->convergence_box->value();
 
         Total_Refresh_Count = (ui->record_time_box->value() * 1000)/ ui->refresh_rate_box->value();
 
@@ -152,6 +173,7 @@ void GraphWorker::startOrStopGraphWork(bool State)
     else
     {
         qDebug() << "Terminated";
+        Recording_Started = false;
 
         detachPanel();
         Refresh_Timer.stop();
@@ -168,16 +190,25 @@ void GraphWorker::startOrStopGraphWork(bool State)
 void GraphWorker::refreshGraph()
 {
     std::vector<USBValueContainer> &values = Driver_->getValueQueue();
+    std::future<void> result;
 
-    std::future<void> results[values.size()];
-
-    for(size_t i = 0; i < values.size(); i++)
+    if(Recording_Started == false)
     {
-        auto binded_function = std::bind(&GraphWorker::calculateTimeStamp, this, _1);
-        results[i] = Thread_Pool.pushWork(binded_function, &values[i]);
+        resetCounters();
+        Recording_Started = true;
+        calculateTimeStamp(&values[0]);
+        Starting_TimeStamp = values[0].timestamp;
     }
 
-    processData(&results[0], values);
+    for(size_t i = 0; i < THREADPOOL_SIZE; i++)
+    {
+
+        auto binded_function = std::bind(&GraphWorker::calculateTimeStamp, this, _1);
+        result = Thread_Pool.pushWork(binded_function, &values[i]);
+
+    }
+
+    processData(result, values);
 
     if(Current_Refresh_Count >= Total_Refresh_Count)
     {
@@ -186,6 +217,7 @@ void GraphWorker::refreshGraph()
         QMessageBox::information(this, "Done", "Record is finished");
         Current_Refresh_Count = 0;
         Saver_->closeFile();
+        Recording_Started = false;
 
     }
 
@@ -196,36 +228,36 @@ void GraphWorker::refreshGraph()
 
 
 
-void GraphWorker::processData(std::future<void> *Results, std::vector<USBValueContainer> &Values)
+void GraphWorker::processData(std::future<void> &Last_Result, std::vector<USBValueContainer> &Values)
 {
 
-    Channel1_Count.clear();
-    Channel2_Count.clear();
-    Channel3_Count.clear();
-    Channel4_Count.clear();
+    Last_Result.get();
+
 
     for(size_t i = 0; i < Values.size(); i++)
     {
-        Results[i].get();
 
         switch (Values[i].channel)
         {
             case SeriesType::c1:
-                Channel1_Count.push_back(Values[i].timestamp);
+                Channel1_Count++;
                 break;
             case SeriesType::c2:
-                Channel2_Count.push_back(Values[i].timestamp);
+                Channel2_Count++;
                 break;
             case SeriesType::c3:
-                Channel3_Count.push_back(Values[i].timestamp);
+                Channel3_Count++;
                 break;
             case SeriesType::c4:
-                Channel4_Count.push_back(Values[i].timestamp);
+                Channel4_Count++;
                 break;
 
             default:
                 break;
         }
+
+        checkCovergentChannels(Values[i]);
+
     }
 
     drawGraph();
@@ -236,48 +268,215 @@ void GraphWorker::processData(std::future<void> *Results, std::vector<USBValueCo
 
 
 
+void GraphWorker::checkCovergentChannels(USBValueContainer &Container)
+{
+
+
+    if(Container.covergence_section == Current_Covergence_Index)
+    {
+        Current_Covergent_Channels[Container.channel - 1] = Container.channel;
+    }
+    else
+    {
+        int digit = 1;
+        int type = 0;
+
+        for(int i = 0; i < 4; i++)
+        {
+            if(Current_Covergent_Channels[i] != 0)
+            {
+                type += Current_Covergent_Channels[i] * digit++;
+            }
+        }
+
+        countCovergentChannels((SeriesType::Type)type);
+
+        for(int i = 0; i < 4; i++)
+            Current_Covergent_Channels[i] = 0;
+    }
+
+}
+
+
+
+void GraphWorker::countCovergentChannels(SeriesType::Type Type_)
+{
+
+    switch (Type_)
+    {
+        case SeriesType::c1_2:
+            Channel1_2_Count++;
+            break;
+        case SeriesType::c1_3:
+            Channel1_3_Count++;
+            break;
+        case SeriesType::c1_4:
+            Channel1_4_Count++;
+            break;
+        case SeriesType::c2_3:
+            Channel2_3_Count++;
+            break;
+        case SeriesType::c2_4:
+            Channel2_4_Count++;
+            break;
+        case SeriesType::c3_4:
+            Channel3_4_Count++;
+            break;
+        case SeriesType::c1_2_3:
+            Channel1_2_3Count++;
+            Channel1_2_Count++;
+            Channel2_3_Count++;
+            Channel1_3_Count++;
+            break;
+        case SeriesType::c1_3_4:
+            Channel1_3_4Count++;
+            Channel1_3_Count++;
+            Channel3_4_Count++;
+            Channel1_4_Count++;
+            break;
+        case SeriesType::c1_2_4:
+            Channel1_2_4Count++;
+            Channel1_2_Count++;
+            Channel1_4_Count++;
+            Channel2_4_Count++;
+            break;
+        case SeriesType::c2_3_4:
+            Channel2_3_4Count++;
+            Channel2_3_Count++;
+            Channel3_4_Count++;
+            Channel2_4_Count++;
+            break;
+        case SeriesType::c1_2_3_4:
+            Channel1_2_Count++;
+            Channel1_3_Count++;
+            Channel1_4_Count++;
+            Channel2_3_Count++;
+            Channel2_4_Count++;
+            Channel3_4_Count++;
+            Channel1_2_3Count++;
+            Channel1_2_4Count++;
+            Channel2_3_4Count++;
+            Channel1_2_3_4Count++;
+            break;
+        default:
+            break;
+    }
+}
+
+
+
+void GraphWorker::resetCounters()
+{
+    Channel1_Count = 0;
+    Channel2_Count = 0;
+    Channel3_Count = 0;
+    Channel4_Count = 0;
+
+    Channel1_2_Count = 0;
+    Channel1_3_Count = 0;
+    Channel1_4_Count = 0;
+    Channel2_3_Count = 0;
+    Channel2_4_Count = 0;
+    Channel3_4_Count = 0;
+
+    Channel1_2_3Count = 0;
+    Channel1_2_4Count = 0;
+    Channel1_3_4Count = 0;
+    Channel2_3_4Count = 0;
+
+    Channel1_2_3_4Count = 0;
+
+    Current_Covergence_Index = 0;
+
+    for(int i = 0; i < 4; i++)
+        Current_Covergent_Channels[i] = 0;
+}
+
+
+
 void GraphWorker::drawGraph()
 {
     int signal_count = 0;
 
-
-
     foreach (GraphContainer container, Series_List)
     {
-
-
-
         switch (container.Type_)
         {
 
             case SeriesType::c1:
-                emit Signals_[signal_count](QString::number(Channel1_Count.size()));
+                emit Signals_[signal_count](QString::number(Channel1_Count));
                 updateSeries(container, Channel1_Count);
 
                 break;
 
             case SeriesType::c2:
-                emit Signals_[signal_count](QString::number(Channel2_Count.size()));
+                emit Signals_[signal_count](QString::number(Channel2_Count));
                 updateSeries(container, Channel2_Count);
 
                 break;
 
             case SeriesType::c3:
-                emit Signals_[signal_count](QString::number(Channel3_Count.size()));
+                emit Signals_[signal_count](QString::number(Channel3_Count));
                 updateSeries(container, Channel3_Count);
 
                 break;
 
             case SeriesType::c4:
-                emit Signals_[signal_count](QString::number(Channel4_Count.size()));
+                emit Signals_[signal_count](QString::number(Channel4_Count));
                 updateSeries(container, Channel4_Count);
 
                 break;
+            case SeriesType::c1_2:
+                emit Signals_[signal_count](QString::number(Channel1_2_Count));
+                    updateSeries(container, Channel1_2_Count);
 
+                break;
+            case SeriesType::c1_3:
+                emit Signals_[signal_count](QString::number(Channel1_3_Count));
+                updateSeries(container, Channel1_3_Count);
 
+                break;
+            case SeriesType::c1_4:
+                emit Signals_[signal_count](QString::number(Channel1_4_Count));
+                updateSeries(container, Channel1_4_Count);
 
+                break;
+            case SeriesType::c2_3:
+                emit Signals_[signal_count](QString::number(Channel2_3_Count));
+                updateSeries(container, Channel2_3_Count);
 
-            break;
+                break;
+            case SeriesType::c2_4:
+                emit Signals_[signal_count](QString::number(Channel2_4_Count));
+                updateSeries(container, Channel2_4_Count);
+
+                break;
+            case SeriesType::c3_4:
+                emit Signals_[signal_count](QString::number(Channel3_4_Count));
+                updateSeries(container, Channel3_4_Count);
+
+                break;
+            case SeriesType::c1_2_3:
+                emit Signals_[signal_count](QString::number(Channel1_2_3Count));
+                updateSeries(container, Channel1_2_3Count);
+
+                break;
+            case SeriesType::c1_2_4:
+                emit Signals_[signal_count](QString::number(Channel1_2_4Count));
+                updateSeries(container, Channel1_2_4Count);
+
+                break;
+            case SeriesType::c2_3_4:
+                emit Signals_[signal_count](QString::number(Channel2_3_4Count));
+                updateSeries(container, Channel2_3_4Count);
+
+                break;
+            case SeriesType::c1_2_3_4:
+                emit Signals_[signal_count](QString::number(Channel1_2_3_4Count));
+                updateSeries(container, Channel1_2_3_4Count);
+
+                break;
+
         default:
             break;
         }
@@ -290,17 +489,25 @@ void GraphWorker::drawGraph()
 
 
 
-void GraphWorker::updateSeries(const GraphContainer &Container, const std::vector<int> &ChannelCount)
+void GraphWorker::updateSeries(const GraphContainer &Container, int &ChannelCount)
 {
 
     QVector<QPointF> old_values= Container.Series_->pointsVector();
     QVector<QPointF> series_values;
 
+    if((int) ChannelCount > Axis_Maximum)
+    {
+        Axis_Maximum = ChannelCount;
+        setGraphAxisMaximum(Axis_Maximum);
+    }
 
     for(int i = 0; i < 99; i++)
         series_values.append(QPointF(i,old_values.at(i+1).y()));
 
-    series_values.append(QPointF(100, ChannelCount.size()));
+    series_values.append(QPointF(100, ChannelCount));
     Container.Series_->replace(series_values);
 
 }
+
+
+

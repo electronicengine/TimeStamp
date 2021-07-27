@@ -45,39 +45,16 @@ void Driver::waitTermination()
 void Driver::parseAndWriteValues(int *Data)
 {
 
-    static int i = 0;
-    static int channel = 0;
-
     USBValueContainer container;
 
-    (void ) Data;
     container.index = Value_Index;
-    container.lock = 1;
-
-
-    container.channel = channel;
-
-    container.coarse = Value_Index;
-    container.fine = Value_Index;
-
-//    container.index = Value_Index;
-//    container.lock = bitExtracted(*Data, 1, 0);
-//    container.channel = bitExtracted(*Data, 3, 1) + 1;
-//    container.coarse = bitExtracted(*Data, 20, 4);
-//    container.fine = bitExtracted(*Data, 6, 24);
+    container.lock = bitExtracted(*Data, 1, 0);
+    container.channel = bitExtracted(*Data, 3, 1) + 1;
+    container.coarse = bitExtracted(*Data, 20, 4);
+    container.fine = bitExtracted(*Data, 6, 24);
 
     Memory_.pushBack(container);
 
-    Value_Index++;
-    channel++;
-
-    if(channel >= 4)
-        channel = 0;
-
-    i++;
-
-    if(i > 60)
-        i=0;
 }
 
 
@@ -95,8 +72,8 @@ void Driver::run()
 //        value = Device_.read32();
 //        if(value != FAIL)
             parseAndWriteValues(&value);
+            usleep(100);
 
-            usleep(10000);
     }
 
     Terminate_ = false;

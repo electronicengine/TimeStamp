@@ -34,6 +34,8 @@ GraphWindow::GraphWindow(QWidget *parent) :
     connect(ui->c2_3_4_checkBox, SIGNAL(stateChanged(int)), this, SLOT(onCheckBoxStateChanged(int)));
     connect(ui->c1_2_3_4_checkBox, SIGNAL(stateChanged(int)), this, SLOT(onCheckBoxStateChanged(int)));
 
+    connect(ui->refresh_rate_box, SIGNAL(valueChanged(int)), this, SLOT(onRefreshCountChanged(int)));
+
     Saver_ = new ValueSaver(this);
 }
 
@@ -80,9 +82,9 @@ void GraphWindow::setupGraph()
 {
     QLineSeries *default_series = new QLineSeries(this);
 
-    Chart_ = std::make_unique<QChart>();
+    Chart_ =  new QChart;
+    Chart_View = new QChartView(Chart_, this);
 
-    Chart_View = std::make_unique<QChartView>(Chart_.get(), this);
     Chart_->addSeries(default_series);
     Chart_->legend()->hide();
     Chart_->createDefaultAxes();
@@ -99,7 +101,7 @@ void GraphWindow::setupGraph()
 
     Chart_View->setRenderHint(QPainter::Antialiasing);
 
-    ui->groupBox_3->layout()->addWidget(Chart_View.get());
+    ui->groupBox_3->layout()->addWidget(Chart_View);
 
     Chart_->axes(Qt::Horizontal).back()->setRange(0, 100);
     Chart_->axes(Qt::Vertical).back()->setRange(0, 100);
@@ -108,8 +110,41 @@ void GraphWindow::setupGraph()
 
 
 
+void GraphWindow::onRefreshCountChanged(int Value)
+{
+    Time_Axis->deleteLater();
+
+    Time_Axis = new QCategoryAxis(this);
+
+    float time_interval = (float)(Value * 25) / 1000;
+
+
+    Time_Axis->append(QString::number(time_interval * 4) + " s", 25);
+    Time_Axis->append(QString::number(time_interval * 3) + " s", 50);
+    Time_Axis->append(QString::number(time_interval * 2) + " s", 75);
+    Time_Axis->append(QString::number(time_interval) + " s", 100);
+
+
+    Time_Axis->setLinePenColor(QColor(114, 159, 207));
+    Time_Axis->setLabelsColor(QColor(114, 159, 207));
+    Time_Axis->setTitleBrush(QBrush(QColor(255, 255, 255)));
+    Time_Axis->setTitleText("Time");
+    Chart_->addAxis(Time_Axis, Qt::AlignBottom);
+
+    foreach (GraphContainer container, Series_List)
+    {
+        container.Series_->attachAxis(Time_Axis);
+    }
+
+}
+
+
+
 bool GraphWindow::addSeries(SeriesType::Type Type)
 {
+
+    Time_Axis = new QCategoryAxis(this);
+    float time_interval = (float)(ui->refresh_rate_box->value() * 25) /1000;
 
     if(Series_List.size() > 5)
         return false;
@@ -129,19 +164,38 @@ bool GraphWindow::addSeries(SeriesType::Type Type)
     Chart_->createDefaultAxes();
     Chart_->axes(Qt::Horizontal).back()->setGridLineVisible(true);
     Chart_->axes(Qt::Horizontal).back()->setLabelsColor(QColor(114, 159, 207));
+    Chart_->axes(Qt::Horizontal).back()->setTitleBrush(QBrush(QColor(255, 255, 255)));
+    Chart_->axes(Qt::Horizontal).back()->setTitleText("Sample Number");
 
     Chart_->axes(Qt::Vertical).back()->setLabelsColor(QColor(114, 159, 207));
     Chart_->axes(Qt::Vertical).back()->setGridLineVisible(true);
+    Chart_->axes(Qt::Vertical).back()->setTitleBrush(QBrush(QColor(255, 255, 255)));
+    Chart_->axes(Qt::Vertical).back()->setTitleText("Channel Read Count");
 
     Chart_->setTitleBrush(QBrush(QColor(114, 159, 207)));
     Chart_->setBackgroundBrush(QBrush(QColor(46, 52, 54)));
     Chart_->setPlotAreaBackgroundBrush(QBrush(QColor(46, 52, 54)));
-    Chart_->setAnimationOptions(QChart::AllAnimations);
+    Chart_->setAnimationOptions(QChart::NoAnimation);
 
     Chart_->axes(Qt::Horizontal).back()->setRange(0, 100);
-    Chart_->axes(Qt::Vertical).back()->setRange(0, 100);
 
+    Time_Axis->append(QString::number(time_interval * 4) + " s", 25);
+    Time_Axis->append(QString::number(time_interval * 3) + " s", 50);
+    Time_Axis->append(QString::number(time_interval * 2) + " s", 75);
+    Time_Axis->append(QString::number(time_interval) + " s", 100);
 
+    Time_Axis->setLinePenColor(QColor(114, 159, 207));
+    Time_Axis->setLabelsColor(QColor(114, 159, 207));
+    Time_Axis->setTitleBrush(QBrush(QColor(255, 255, 255)));
+    Time_Axis->setTitleText("Time");
+
+    Chart_->addAxis(Time_Axis, Qt::AlignBottom);
+    graph_container.Series_->attachAxis(Time_Axis);
+
+    foreach (GraphContainer container, Series_List)
+    {
+        container.Series_->attachAxis(Time_Axis);
+    }
     Chart_View->setRenderHint(QPainter::Antialiasing);
 
     QVBoxLayout *vertical_layout = new QVBoxLayout;

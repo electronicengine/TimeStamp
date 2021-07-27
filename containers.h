@@ -32,19 +32,6 @@ using namespace QtCharts;
 
 
 
-struct USBValueContainer
-{
-
-    uint32_t index;
-    uint8_t lock;
-    uint8_t channel;
-    uint32_t coarse;
-    uint8_t fine;
-    uint32_t timestamp;
-
-};
-
-
 
 struct PanelContainer
 {
@@ -63,17 +50,17 @@ struct SeriesType
         c2,
         c3,
         c4,
-        c1_2,
-        c1_3,
-        c1_4,
-        c2_3,
-        c2_4,
-        c3_4,
-        c1_2_3,
-        c1_2_4,
-        c1_3_4,
-        c2_3_4,
-        c1_2_3_4
+        c1_2 = 5,       // 1 + (2*2)
+        c1_3 = 7,       // 1 + (3*2)
+        c1_4 = 9,       // 1 + (4*2)
+        c2_3 = 8,       // 2 + (3*2)
+        c2_4 = 10,      // 2 + (4*2)
+        c3_4 = 11,      // 3 + (4*2)
+        c1_2_3 = 14,    // 1 + (2*2) + (3*3)
+        c1_2_4 = 17,    // 1 + (2*2) + (4*3)
+        c1_3_4 = 19,    // 1 + (3*2) + (4*3)
+        c2_3_4 = 20,    // 2 + (3*2) + (4*3)
+        c1_2_3_4 = 30   // 1 + (2*2) + (3*3) +(4*4)
 
     };
 
@@ -101,6 +88,25 @@ struct GraphContainer
    int Current_Value;
 
 };
+
+
+
+struct USBValueContainer
+{
+
+    uint32_t index;
+    uint8_t lock;
+    uint8_t channel;
+    uint8_t pre_channel;
+    uint32_t coarse;
+    uint8_t fine;
+    uint32_t pre_coarse;
+    uint8_t pre_fine;
+    uint32_t timestamp;
+    uint32_t covergence_section;
+};
+
+
 
 
 #endif // CONTAINERS_H

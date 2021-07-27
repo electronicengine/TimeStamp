@@ -19,6 +19,7 @@ class GraphWindow : public QMainWindow
 {
     Q_OBJECT
 
+    QCategoryAxis *Time_Axis;
 
 public:
     explicit GraphWindow(QWidget *parent = nullptr);
@@ -40,18 +41,19 @@ signals:
 private slots:
     void onCheckBoxStateChanged(int arg1);
     void onClickFileBrowserButton(bool);
+    void onRefreshCountChanged(int Value);
 
 protected:
     Ui::GraphWindow *ui;
     std::list<GraphContainer> Series_List;
     ValueSaver *Saver_;
+    QChart *Chart_;
 
 private:
 
     std::vector<GraphContainer> test;
 
-    std::unique_ptr<QChartView> Chart_View;
-    std::unique_ptr<QChart> Chart_;
+    QChartView *Chart_View;
 
 
     void setupGraph();

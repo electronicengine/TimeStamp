@@ -14,7 +14,7 @@
 #include "ftd3xx.h"
 #include "raundrobinmemory.h"
 
-#define RAUNDROBIN_SIZE 50
+#define RAUNDROBIN_SIZE 100
 
 
 class MainWindow;

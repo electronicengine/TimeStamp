@@ -26,6 +26,13 @@ void ValueSaver::openFile(const QString &FileDir)
 
     Save_File = new QFile(FileDir + "/TimeStamp_" + QString::number(time(NULL)) + ".log");
     Save_File->open(QIODevice::WriteOnly | QIODevice::Text);
+    QTextStream out(Save_File);
+
+    out << "timestamp"  << "\t"
+        << "channel" << "\t"
+        << "coarse" << "\t"
+        << "fine" << "\t"
+        << "covergence section" << "\n";
 
 }
 
@@ -73,7 +80,11 @@ void ValueSaver::writeToFile(std::vector<USBValueContainer> &Values)
         QTextStream out(Save_File);
 
         foreach (USBValueContainer container, Values)
-            out << container.timestamp  << "\t" << container.channel << "\n";
+            out << container.timestamp  << "\t"
+                << container.channel << "\t"
+                << container.coarse << "\t"
+                << container.fine << "\t"
+                << container.covergence_section << "\n";
 
     }
 
